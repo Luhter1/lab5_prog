@@ -76,6 +76,12 @@ public record Ticket (Long id, String name, Coordinates coordinates, Date creati
 
     }
 
+    /** 
+     * Реализует сравнение обьектов данного класса по их id.
+     * @param ticket обьект для сравнения
+     * @return позитивное - значение обьекта больше сравниваемого, 0 - значения обьектов равны, негативное - значение обьекта меньше сравниваемого
+     *                     
+     */
     @Override
     public int compareTo(Ticket ticket) {
        return (int)(this.id-ticket.id());
