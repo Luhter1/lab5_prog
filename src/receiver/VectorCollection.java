@@ -33,7 +33,7 @@ public class VectorCollection{
     /**
     * Очередь, содержащая последовательность команд, считанных из скипта
     */
-    private static ArrayDeque<String> scriptQueue = new ArrayDeque<>();
+    public static ArrayDeque<String> scriptQueue = new ArrayDeque<>();
     /**
     * Коллекция, содержащая все данные о билетах
     */
@@ -89,7 +89,7 @@ public class VectorCollection{
      * @exception RecursionError ошибка зацикливания выполнения скрипта
      * @exception MyFileNotFoundException ошибка при чтении файла                  
      */
-    public static void Execute(String path) throws RecursionError, MyFileNotFoundException{
+    public static void Execute(String path) throws RecursionError{
         try{
         List<String> scriptCommands = ReadScript.read(path);
         ListIterator<String> iterComs = scriptCommands.listIterator(scriptCommands.size());
@@ -101,7 +101,7 @@ public class VectorCollection{
         while(!scriptQueue.isEmpty()){
             String com = scriptQueue.pop();
             System.out.println("\033[1;94m\nExecuted command:\033[0m "+com);
-            CommandManager.execute(com);
+            CommandManager.execute(com, true);
         }
         }catch(StackOverflowError e){
             scriptQueue = new ArrayDeque<>();
@@ -233,8 +233,10 @@ public class VectorCollection{
      * @param args список с названием команды и параметрами для нее
      *
      */
-    public static void removeLower(String[] args){
+    public static void removeLower(String[] args, boolean isScript){
+        String name = CreateTicketObject.nameGenerate(args[1]);
         Integer price = CreateTicketObject.priceGenerate(args[2]);
+
         price = price == null ? 0 : price;
         ArrayList<Long> delete = new ArrayList<>();
 
@@ -254,7 +256,8 @@ public class VectorCollection{
             String[] t = {"", ""+id};            
             remove(t);
         }
-        add(args);
+        String[] Nargs = {args[0], name, ""+price};
+        add(Nargs, isScript, true);
     }
     // remove_lower command end
 
@@ -304,11 +307,12 @@ public class VectorCollection{
      * </ul>
      * @param args список с названием команды и параметрами команды
      */
-    public static void addIf(String[] args){
+    public static void addIf(String[] args, boolean isScript){
+        String name = CreateTicketObject.nameGenerate(args[1]);
         Integer price = CreateTicketObject.priceGenerate(args[2]);
-
-        if(price!=null&&price>Price.getMaxPrice()){add(args);}
-        else{System.out.println("\033[1;97m\nElement will not be created because it does not have a maximum price value\n\u001B[0m");}
+        String[] Nargs = {args[0], name, ""+price};
+        if(price!=null&&price>Price.getMaxPrice()){add(Nargs, isScript, true);}
+        else{add(Nargs, isScript, false);System.out.println("\033[1;97m\nElement will not be created because it does not have a maximum price value\n\u001B[0m");}
     }
     // add_if_max command end
 
@@ -424,11 +428,17 @@ public class VectorCollection{
      * @param args список: команда и передаваемые значения
      */
     public static void add(String[] args){
+        add(args, false, true);       
+    }
+
+    public static void add(String[] args, boolean isScript, boolean isMax){
         if(args.length==3){
-            CreateTicketObject.generate("null", args);
-            System.out.println("\n\u001B[32mA new element of type Ticket was added succesfully\u001B[0m\n");
+            CreateTicketObject.generate("null", args, isScript, isMax);
+            if(isMax){
+                System.out.println("\n\u001B[32mA new element of type Ticket was added succesfully\u001B[0m\n");
+            }
         }else{
-            CreateTicketObject.generate(args[1], Arrays.copyOfRange(args, 1, 4));
+            CreateTicketObject.generate(args[1], Arrays.copyOfRange(args, 1, 4), isScript, isMax);
             System.out.println("\n\u001B[32mThe element of type Ticket was updated succesfully\u001B[0m\n");
         }            
     }

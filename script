@@ -1,3 +1,29 @@
-show
-ad
+sho
+update 1 1 1
+1
+1
+vip
+yes
+1
+100
+null
+add_if_max 1 10
+1
+1
+vip
+yes
+1
+100
+null
+filter_by_price 100
+remove_lower bal 10
+1
+1
+vip
+yes
+1
+100
+null
 info
+print_field_descending_price
+exit

@@ -1,0 +1,92 @@
+добавление эл-ов в коллекцию и просмотр эл-ов
+
+#TODO:
+- создать интерфейс команд
+ 
+
+
+
+Шаблон Command состоит из нескольких эл-ов:
+ = Command - интерфейс или абстрактный класс, обьявляющий поведение выполнения 
+
+    // Шаг 1: Создаем интерфейс Command
+    interface Command {
+        void execute();
+    }
+
+ = Concrete Command - конкретные реализации Command
+
+    // Шаг 2: Создание классов Concrete Command
+    class LightOnCommand implements Command {
+        private Light light;
+
+        public LightOnCommand(Light light) {
+            this.light = light;
+        }
+
+        public void execute() {
+            light.turnOn();
+        }
+    }
+
+ = Receiver - обьект, выполняющий фактическую операцию во время выполнения команды
+
+    // Шаг 3: Создаем класс Receiver
+    class Light {
+        public void turnOn() {
+            System.out.println("Light is on");
+        }
+
+        public void turnOff() {
+            System.out.println("Light is off");
+        }
+
+        public void changeColor() {
+          System.out.println("Light color has been changed");
+        }
+    }
+
+ = Invoker - отвечает за инициирование выполнения команды, может вызвать метод execute()
+
+    // Шаг 4: Создайте класс Invoker
+    class RemoteControl {
+        private Command command;
+
+        public void setCommand(Command command) {
+            this.command = command;
+        }
+
+        public void pressButton() {
+            command.execute();
+        }
+    }
+
+ = Client - клиент, создает обькты, настраивает получателей и связывает с вызывающими
+
+    // Шаг 5: Создаем класс Client
+    class Client {
+        public static void main(String[] args) {
+            // Создаем receiver
+            Light light = new Light();
+
+            // Создаем команды
+            LightOnCommand lightOnCommand = new LightOnCommand(light);
+            LightOffCommand lightOffCommand = new LightOffCommand(light);
+            LightChangeColorCommand lightChangeColorCommand = new LightChangeColorCommand(light);
+
+            // Создаем invoker
+            RemoteControl remoteControl = new RemoteControl();
+
+            // Устанавливаем команды в invoker
+            remoteControl.setCommand(lightOnCommand);
+
+            // Нажмите кнопку, чтобы включить свет
+            remoteControl.pressButton();
+
+            // Устанавливаем другую команду в invoker
+            remoteControl.setCommand(lightOffCommand);
+
+            // Нажмите кнопку, чтобы выключить свет
+            remoteControl.pressButton();
+        }
+    }

@@ -16,8 +16,23 @@ public class UpdateCommand implements BaseCommand{
      * @exception LackOfDataException вызывается при недостатке аргументов для команды
     */        
     public void execute(String[] args) throws LackOfDataException{ // name, price
-        if(args.length!=4){throw new LackOfDataException(args.length-1, 3);}
-        VectorCollection.add(args); // create new ticket
+        execute(args, false);
+    }
+
+    public void execute(String[] args, boolean isScript) throws LackOfDataException{ // name, price
+        if(args.length==1){
+            String[] command={args[0], null, "", null};
+            VectorCollection.add(command, isScript, true);
+        }else if(args.length==2){
+            String[] command={args[0], args[1], "", null};
+            VectorCollection.add(command, isScript, true);
+        }else if(args.length==3){
+            String[] command={args[0], args[1], args[2], null};
+            VectorCollection.add(command, isScript, true);
+        }else if(args.length==4){
+            String[] command={args[0], args[1], args[2], args[3]};
+            VectorCollection.add(command, isScript, true);
+        }else{throw new LackOfDataException(args.length-1, 3);}  
         
     }
 

@@ -24,6 +24,10 @@ public class RemoveAnyByPrice implements BaseCommand{
         VectorCollection.removeAnyByPrice(args); // create new ticket
     }
 
+    public void execute(String[] args, boolean isScript) throws LackOfDataException, PositiveException, StringParseException{
+        execute(args);
+    }
+
     // создать обьект билет, получить его прайс и удалить
     public String call(){return "remove_any_by_price";}
 

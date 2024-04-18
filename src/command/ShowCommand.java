@@ -15,8 +15,12 @@ public class ShowCommand implements BaseCommand{
      * @exception LackOfDataException вызывается при недостатке аргументов для команды
     */
     public void execute(String[] args) throws LackOfDataException{
-        if(args.length!=1){throw new LackOfDataException(args.length-1, 0);}
+        //if(args.length!=1){throw new LackOfDataException(args.length-1, 0);}
         VectorCollection.show();
+    }
+
+    public void execute(String[] args, boolean isScript) throws LackOfDataException{
+        execute(args);
     }
 
     public String call(){return "show";}

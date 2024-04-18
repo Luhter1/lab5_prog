@@ -1,8 +1,8 @@
 package read;
 
 import java.io.*;
-import read.exception.MyFileNotFoundException;
 import java.util.ArrayList;
+import invoker.CommandManager;
 
 /** 
  * Класс, отвечающий за считывание команд из скрипта.
@@ -23,18 +23,23 @@ public class ReadScript{
      * @exception MyFileNotFoundException Если скрипт не был найден
      *                       
      */
-    public static ArrayList<String> read(String path) throws MyFileNotFoundException{
+    public static ArrayList<String> read(String path){
         ArrayList<String> commands = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(path))){
-            String line;
+        BufferedReader scan = CommandManager.getScan();
 
-            while((line = br.readLine()) != null) {
-                commands.add(line);
+        while(true){
+            try (BufferedReader br = new BufferedReader(new FileReader(path))){
+                String line;
+
+                while((line = br.readLine()) != null) {
+                    commands.add(line);
+                }
+                
+                return commands;    
+            } catch (IOException e) {
+                System.out.print("\nIncorrect path, try again: ");
+                try{path = scan.readLine();}catch(IOException ex){}
             }
-            
-            return commands;    
-        } catch (IOException e) {
-            throw new MyFileNotFoundException(path);
         }
 
         

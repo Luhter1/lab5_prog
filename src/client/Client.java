@@ -58,8 +58,10 @@ public class Client{
         do {// gthtytcnb exit to command and clear too
             System.out.print("\u001B[33m" + "Entry command: " +"\u001B[0m");
             str = input.readLine();
-
-            CommandManager.execute(str);
+            if(str==null){
+                CommandManager.execute("exit", false);
+            }
+            CommandManager.execute(str, false);
 
         } while(true);  
   

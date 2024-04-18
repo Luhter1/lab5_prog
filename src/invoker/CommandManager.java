@@ -6,7 +6,7 @@ import invoker.exception.*;
 import java.lang.NullPointerException;
 import receiver.VectorCollection;
 import exception.MyException;
-import java.io.BufferedReader;
+import java.io.*;
 
 /** 
  * Класс, отвечающий за инициирование выполнения команды.
@@ -66,23 +66,32 @@ public class CommandManager{
      * Добавляет команду в очередь истории команд
      * @param line Введенная строка с командой
     */ 
-    public static void execute(String line){
+    public static void execute(String line, boolean isScript){
         try{
             String commandName = line.split(" ")[0];
             
             // обработка, если нет команды
             try{
-                commandlist.get(commandName).execute(line.split(" "));
+                if(!isScript){
+                    commandlist.get(commandName).execute(line.split(" "));
+                }else{
+                    commandlist.get(commandName).execute(line.split(" "), true);
+                }
                 if(VectorCollection.HistorySize()==5) VectorCollection.removeLastHistory();
                 VectorCollection.pushHistory(commandName);
-            }catch(NullPointerException e){throw new CommandException(commandName);}
-
+            }catch(NullPointerException e){
+                if(!isScript){throw new CommandException(commandName);}
+                else{
+                    System.out.print("\u001B[31m\nError: \u001B[0m incorrect command \""+line+"\"\n\ttry again: ");
+                    execute(Scan.readLine(), isScript);
+                }
+            }
         }catch(Exception e){
             System.out.print("\u001B[31m\nError: \u001B[0m" + e); 
             if(((MyException)e).NeedArgs()){            
                 System.out.println("\nUse help to see available commands and arguments' properties\n");
             }else{System.out.println("\n");}        
-}
+        }
     }
 
     /**

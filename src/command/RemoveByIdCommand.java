@@ -16,9 +16,18 @@ public class RemoveByIdCommand implements BaseCommand{
      * @exception LackOfDataException вызывается при недостатке аргументов для команды
     */       
     public void execute(String[] args) throws LackOfDataException{ // name, price
-        if(args.length!=2){throw new LackOfDataException(args.length-1, 1);}
-        VectorCollection.remove(args); // create new ticket
+        execute(args, false);
         
+    }
+
+    public void execute(String[] args, boolean isScript) throws LackOfDataException{
+        if(args.length==1){
+            String[] command={args[0], null};
+            VectorCollection.remove(command);
+        }else if(args.length==2){
+            String[] command={args[0], args[1]};
+            VectorCollection.remove(command);
+        }else{throw new LackOfDataException(args.length-1, 1);}  
     }
 
     public String call(){return "remove_by_id";}

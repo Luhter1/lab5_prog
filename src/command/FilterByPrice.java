@@ -24,6 +24,10 @@ public class FilterByPrice implements BaseCommand{
         VectorCollection.FilterByPrice(args); // create new ticket
     }
 
+    public void execute(String[] args, boolean isScript) throws LackOfDataException, PositiveException, StringParseException{
+        execute(args);
+    }
+
     // создать обьект билет, получить его прайс и удалить
     public String call(){return "filter_by_price";}
 

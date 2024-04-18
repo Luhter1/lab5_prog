@@ -16,6 +16,9 @@ public interface BaseCommand{
     */
     public void execute(String[] args) throws MyException;
 
+
+    public void execute(String[] args, boolean isScript) throws MyException;
+
     /**
      * Возвращает строковое представление команды для команды {@link command.ShowCommand}
      * @return строковое представление команды 

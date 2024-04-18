@@ -17,8 +17,12 @@ public class PrintFieldDescendingPrice implements BaseCommand{
      * @exception LackOfDataException вызывается при недостатке аргументов для команды
     */   
     public void execute(String[] args) throws LackOfDataException{ // name, price
-        if(args.length!=1){throw new LackOfDataException(args.length-1, 0);}  
+        //if(args.length!=1){throw new LackOfDataException(args.length-1, 0);}  
         VectorCollection.PrintFieldDescendingPrice(); // create new ticket
+    }
+
+    public void execute(String[] args, boolean isScript) throws LackOfDataException{
+        execute(args);
     }
 
     // создать обьект билет, получить его прайс и удалить

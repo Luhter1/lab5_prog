@@ -17,8 +17,20 @@ public class AddIfMaxCommand implements BaseCommand{
      * @exception LackOfDataException вызывается при недостатке аргументов для команды
     */
     public void execute(String[] args) throws LackOfDataException{ // name, price
-        if(args.length!=3){throw new LackOfDataException(args.length-1, 2);}  
-        VectorCollection.addIf(args); // create new ticket
+        execute(args, false);
+    }
+    public void execute(String[] args, boolean isScript) throws LackOfDataException{
+    
+        if(args.length==1){
+            String[] command={args[0], "", null};
+            VectorCollection.addIf(command, isScript);
+        }else if(args.length==2){
+            String[] command={args[0], args[1], null};
+            VectorCollection.addIf(command, isScript);
+        }else if(args.length==3){
+            String[] command={args[0], args[1], args[2]};
+            VectorCollection.addIf(command, isScript);
+        }else{throw new LackOfDataException(args.length-1, 2);}  
     }
 
     public String call(){return "add_if_max";}

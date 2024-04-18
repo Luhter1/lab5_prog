@@ -128,6 +128,7 @@ public class CreateTicketObject{
         BufferedReader scan = CommandManager.getScan();
         Integer price;
         try{
+            if(SPrice==null) throw new NullValueException("price");
             price = validation.realInt(SPrice, 1);
         }catch(Exception e){
 
@@ -217,23 +218,34 @@ public class CreateTicketObject{
      *          
      * @return возвращает координаты места         
      */
-    public static Coordinates coordinateGenerate(){
+    public static Coordinates coordinateGenerate(boolean isScript){
         BufferedReader scan = CommandManager.getScan();
-        String x, y;
+        String x=null;
+        String y=null;
         Coordinates coord;
+        boolean first_script = false;
+        if(isScript){
+            x = VectorCollection.scriptQueue.pop();
+            y = VectorCollection.scriptQueue.pop();
+            System.out.print("\nInputed x: " + x);
+            System.out.println("\nInputed y: " + y);
+            first_script = true;
+        }
         while(true){
             try{
+                if(!first_script){
                 System.out.print("\nInput x (double): ");
                 x = scan.readLine(); 
 
                 System.out.print("Input y (double): ");
-                y = scan.readLine();    
-
+                y = scan.readLine();   
+                }else{
+                    first_script = false;        
+                }
                 coord = validation.coordinates(x, y);
                 break;
 
-            } catch(Exception e){System.out.println("\u001B[31m" + "\nError: " +"\u001B[0m"+e);}
-
+            } catch(Exception e){System.out.println("\u001B[31m" + "\nError: \u001B[0m"+e);}
         }
 
         return coord;
@@ -248,13 +260,27 @@ public class CreateTicketObject{
      *          
      * @return возвращает тип билета         
      */
-    public static TicketType typeGenerate(){
+    public static TicketType typeGenerate(boolean isScript){
         BufferedReader scan = CommandManager.getScan();
         TicketType type;
+        boolean first_script=false;
+        String Stype=null;
+
+        if(isScript){
+            Stype = VectorCollection.scriptQueue.pop();
+            System.out.println("\nInputed Ticket type: " + Stype);
+            first_script = true;
+        }
+
         while(true){
             try{
-                System.out.print("\nSelect ticket type from:\n-- \"vip\"\n-- \"usual\"\n-- \"budgetary\"\n-- \"cheap\"\nInput: ");
-                type = validation.type(TicketType.class, scan.readLine().toUpperCase());                 
+                if(!first_script){
+                    System.out.print("\nSelect ticket type from:\n-- \"vip\"\n-- \"usual\"\n-- \"budgetary\"\n-- \"cheap\"\nInput: ");
+                    Stype = scan.readLine();
+                }else{
+                    first_script = false;
+                }
+                type = validation.type(TicketType.class, Stype.toUpperCase());                 
                 break;
 
             } catch(Exception e){System.out.println("\u001B[31m" + "\nError: " +"\u001B[0m"+e);}
@@ -286,7 +312,7 @@ public class CreateTicketObject{
      *          
      * @see data.id.IDGenerator              
      */
-    public static void generate(String SId, String[] args){
+    public static void generate(String SId, String[] args, boolean isScript, boolean isMax){
         Coordinates coord;
         TicketType type;
         Venue venue;
@@ -316,30 +342,39 @@ public class CreateTicketObject{
         }else{Price.put(0, id[0]);}
     
         // Coordinates generation
-        coord = coordinateGenerate();
+        coord = coordinateGenerate(isScript);
 
         // Date generation
         Date date = new Date();
         
         // Ticket Type generation
-        type = typeGenerate();       
+        type = typeGenerate(isScript);       
 
         // Is user want to add venue
-        String ans;
+        String ans=null;
+        boolean first_script=false;
+        if(isScript){
+            ans = VectorCollection.scriptQueue.pop();
+            first_script = true;
+        }
         while(true){
 
             System.out.print("\nCreate venue (yes or no): ");
             try{
-                ans = scan.readLine().toLowerCase();
+                if(!first_script){
+                    ans = scan.readLine().toLowerCase();
+                }else{
+                    first_script = false;
+                    System.out.println(ans);            
+                }
                 if(ans.equals("no")){venue = null; break;}
-                else if(ans.equals("yes")){venue = CreateTicketObject.venueGenerate(); break;}
+                else if(ans.equals("yes")){venue = CreateTicketObject.venueGenerate(isScript); break;}
             }catch(IOException e){
                 System.out.println("\u001B[31m" + "\nError: " +"\u001B[0m incorrect velue");
             }          
         }
-
-       VectorCollection.addToCollection(new Ticket(id[0], name, coord, date, price, type, venue),
-            id[1], remove);
+        if(isMax==true){
+       VectorCollection.addToCollection(new Ticket(id[0], name, coord, date, price, type, venue), id[1], remove);}
     }
 
 
@@ -358,19 +393,29 @@ public class CreateTicketObject{
      * @return возвращает заведение для билета
      * @see data.id.IDGenerator                        
      */
-    public static Venue venueGenerate(){
+    public static Venue venueGenerate(boolean isScript){
         long id = IDGenerator.currentIdV();
-        String name;
+        String name=null;
         Integer capacity;
         VenueType type = null;
-
+        boolean first_script = false;
         BufferedReader scan = CommandManager.getScan();
 
         // venue name generation
+        if(isScript){
+            first_script = true;
+            name = VectorCollection.scriptQueue.pop();
+            System.out.println("\nInputed venue name: "+ name);    
+        }
         while(true){
             try{
-                System.out.print("\nInput venue name (String): ");
-                name = validation.name("venue", scan.readLine());                
+                if(!first_script){
+                    System.out.print("\nInput venue name (String): ");
+                    name = scan.readLine();
+                }else{
+                    first_script=false;
+                }
+                name = validation.name("venue", name);                
                 break;
 
             } catch(Exception e){System.out.println("\u001B[31m" + "\nError: " +"\u001B[0m"+e);}
@@ -378,10 +423,19 @@ public class CreateTicketObject{
         }
 
         // venue capacity generation
+        String Scap=null;
+        if(isScript){
+            first_script = true;
+            Scap = VectorCollection.scriptQueue.pop();
+            System.out.println("\nInputed venue capacity: "+ Scap);    
+        }
         while(true){
             try{
-                System.out.print("\nInput venue capacity (int or null): ");
-                capacity = validation.realInt(scan.readLine(), 0); //Передать на валидацию,                 
+                if(!first_script){
+                    System.out.print("\nInput venue capacity (int or null): ");
+                    Scap = scan.readLine();
+                }else{first_script=false;}
+                capacity = validation.realInt(Scap, 0); //Передать на валидацию,                 
                 break;
 
             } catch(Exception e){System.out.println("\u001B[31m" + "\nError: " +"\u001B[0m"+e);}
@@ -390,12 +444,19 @@ public class CreateTicketObject{
 
 
         // venue type generation
-        String line;
+        String line=null;
+        if(isScript){
+            first_script = true;
+            line = VectorCollection.scriptQueue.pop();
+            System.out.println("\nInputed venue capacity: "+ Scap);    
+        }
         while(true){
             try{
+                if(!first_script){
                 System.out.print("\nSelect venue type from:\n-- \"pub\"\n-- \"bar\"\n-- \"mall\"\n-- null\nInput: ");
-                
                 line = scan.readLine();
+                }else{first_script=false;}
+
                 if(!line.equals("null")){
                     type = validation.type(VenueType.class, line.toUpperCase());
                 }                 
