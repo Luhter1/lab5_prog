@@ -23,7 +23,7 @@ public class FilterByPrice implements BaseCommand{
         if(args.length!=2){throw new LackOfDataException(args.length-1, 1);}  
         VectorCollection.FilterByPrice(args); // create new ticket
     }
-
+  
     public void execute(String[] args, boolean isScript) throws LackOfDataException, PositiveException, StringParseException{
         execute(args);
     }

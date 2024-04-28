@@ -20,9 +20,9 @@ public class main{
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String path = null;
             
-            try{
-                path = System.getenv("LAB5FILE");
-            }catch(NullPointerException e){
+            
+            path = System.getenv("LAB5FILE");
+            if(path==null){
 
                 System.out.println("\u001B[31m\nError: \u001B[0m переменая окружения не обнаружена\n");
                 System.exit(0);

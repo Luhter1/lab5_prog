@@ -448,7 +448,7 @@ public class CreateTicketObject{
         if(isScript){
             first_script = true;
             line = VectorCollection.scriptQueue.pop();
-            System.out.println("\nInputed venue capacity: "+ Scap);    
+            System.out.println("\nInputed venue type: "+ line);    
         }
         while(true){
             try{

@@ -16,7 +16,11 @@ public interface BaseCommand{
     */
     public void execute(String[] args) throws MyException;
 
-
+    /**
+     * Метод, определяющий операции для выполнения команды через скрипт
+     * @param args название команды и параметры для нее
+     * @exception LackOfDataException вызывается при недостатке аргументов для команды
+    */
     public void execute(String[] args, boolean isScript) throws MyException;
 
     /**

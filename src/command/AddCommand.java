@@ -19,6 +19,7 @@ public class AddCommand implements BaseCommand{
     public void execute(String[] args) throws LackOfDataException{ // name, price
         execute(args, false);
     }
+
     public void execute(String[] args, boolean isScript) throws LackOfDataException{
     
         if(args.length==1){

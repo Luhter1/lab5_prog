@@ -17,12 +17,12 @@ public class ExecuteScriptCommand implements BaseCommand{
      * @param args название команды и параметры для нее
      * @exception LackOfDataException вызывается при недостатке аргументов для команды
      * @exception RecursionError ошибка зацикливания исполнения скрипта
-     * @exception MyFileNotFoundException ошибка чтения файла
     */
     public void execute(String[] args) throws LackOfDataException, RecursionError{
         if(args.length!=2){throw new LackOfDataException(args.length-1, 1);}
         VectorCollection.Execute(args[1]);
     }
+
 
     public void execute(String[] args, boolean isScript) throws LackOfDataException, RecursionError{
         execute(args);
